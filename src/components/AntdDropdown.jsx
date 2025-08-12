@@ -27,14 +27,14 @@ const AntdDropdown = ({
       onChange={onChange}
       defaultValue={defaultValue}
       placeholder={placeholder}
-      mode={mode} // "multiple" | "tags"
+      mode={mode} 
       allowClear={allowClear}
       disabled={disabled}
       size={size}
       bordered={bordered}
       style={style}
       className={className}
-      showSearch // ✅ always searchable
+      showSearch 
       optionFilterProp={optionFilterProp}
       filterOption={
         filterOption ||

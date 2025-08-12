@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const formSlice =createSlice({
-    name:"todo",
-    initialState:[],
-    reducers:{
-        addTodo:(state,action)=>{
-                console.log("actions",action.payload)
+const formSlice = createSlice({
+    name: "formBuilder",
+    initialState: [],
+    reducers: {
+        formBuilder: (state, action) => {
+            state.push({ formDetails: action.payload })
         }
-    }
+    },
 })
 
-export const { addTodo } = formSlice.actions;
+export const { formBuilder } = formSlice.actions;
 export default formSlice.reducer;
