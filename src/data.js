@@ -1,0 +1,1 @@
+[{ inputType: "text", label: "Name", placeholder: "Enter Name", minLength: "3", maxLength: "100", defaultValue: "", size: "", },]
