@@ -1,6 +1,7 @@
 import axios from 'axios';
 import './App.css'
 import FormBuilder from './views/FormBuilder'
+import FormPreview from './views/FormPreview'
 function App() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -56,6 +57,7 @@ function App() {
     <>
       <button onClick={handleSubmit}>Click</button>
       <FormBuilder />
+      <FormPreview />
     </>
   )
 }
