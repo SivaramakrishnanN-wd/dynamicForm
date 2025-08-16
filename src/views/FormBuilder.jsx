@@ -15,7 +15,6 @@ export default function FormBuilder() {
   const [form] = Form.useForm();
   const dispatch = useDispatch()
   const formbuilder = useSelector((state) => state.form)?.[0]?.formDetails
-  console.log("formbuilder", formbuilder)
   const [showDropdownOptions, setShowDropdownOptions] = useState(false);
   const fieldOptions = [
     { value: "text", label: "Text" },
