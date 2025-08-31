@@ -5,11 +5,11 @@ const formSlice = createSlice({
     initialState: [],
     reducers: {
         formBuilder: (state, action) => {
-            state.push({ formDetails: action.payload })
+            state.push(action.payload)
         }
     },
 })
-    
+
 export const { formBuilder } = formSlice.actions;
 export default formSlice.reducer;
 

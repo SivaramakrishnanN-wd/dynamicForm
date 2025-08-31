@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, Table } from "antd";
 import AntdCard from "../components/AntdCard";
 import AntdCol from "../components/AntdCol";
 import AntdDropdown from "../components/AntdDropdown";
@@ -10,12 +10,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formBuilder } from "../store/slice/formSlice";
 
-
 export default function FormBuilder() {
   const [form] = Form.useForm();
-  const dispatch = useDispatch()
-  const formbuilder = useSelector((state) => state.form)?.[0]?.formDetails
+  const dispatch = useDispatch();
+  const formbuilder = useSelector((state) => state.form) || []; // redux array
   const [showDropdownOptions, setShowDropdownOptions] = useState(false);
+  console.log("formbuilder", formbuilder)
   const fieldOptions = [
     { value: "text", label: "Text" },
     { value: "number", label: "Number" },
@@ -33,23 +33,41 @@ export default function FormBuilder() {
   ];
 
   const onFinish = (values) => {
-    dispatch(formBuilder(values))
+    dispatch(formBuilder(values));
+    form.resetFields();
+    setShowDropdownOptions(false);
   };
+
   const handleFieldTypeChange = (value) => {
-    if (value === "dropdown") {
+    if (["dropdown", "radio", "checkbox"].includes(value)) {
       setShowDropdownOptions(true);
     } else {
       setShowDropdownOptions(false);
       form.setFieldsValue({ dropdownOptions: [] });
     }
   };
+
+
+  // table column setup
+  const columns = [
+    { title: "Field Name", dataIndex: "fieldName", key: "fieldName" },
+    { title: "Field Type", dataIndex: "fieldType", key: "fieldType" },
+    { title: "Label", dataIndex: "Label", key: "Label" },
+    { title: "Placeholder", dataIndex: "placeHolder", key: "placeHolder" },
+    { title: "Min Length", dataIndex: "minLength", key: "minLength" },
+    { title: "Max Length", dataIndex: "maxLength", key: "maxLength" },
+    {
+      title: "Options",
+      dataIndex: "dropdownOptions",
+      key: "dropdownOptions",
+      render: (options) => (options ? options.join(", ") : "-"),
+    },
+  ];
+
+
   return (
     <AntdCard title="Form Builder">
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         {/* Form Name */}
         <AntdRow gutter={[16, 16]} align="middle">
           <AntdCol xs={24} sm={12} md={8}>
@@ -74,6 +92,7 @@ export default function FormBuilder() {
               <AntdInput placeholder="Enter Field Name" />
             </Form.Item>
           </AntdCol>
+
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
               name="fieldType"
@@ -86,14 +105,20 @@ export default function FormBuilder() {
                 onChange={handleFieldTypeChange}
               />
             </Form.Item>
-
           </AntdCol>
+
           {showDropdownOptions && (
             <AntdCol xs={24} sm={12} md={8}>
               <Form.Item
                 name="dropdownOptions"
-                label="Dropdown Options"
-                rules={[{ required: true, message: "Please enter dropdown options" }]}
+                label={
+                  form.getFieldValue("fieldType") === "radio"
+                    ? "Radio Options"
+                    : form.getFieldValue("fieldType") === "checkbox"
+                      ? "Checkbox Options"
+                      : "Dropdown Options"
+                }
+                rules={[{ required: true, message: "Please enter options" }]}
               >
                 <AntdDropdown
                   mode="tags"
@@ -102,26 +127,28 @@ export default function FormBuilder() {
                 />
               </Form.Item>
             </AntdCol>
-
           )}
+
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
               name="minLength"
               label="Min Length"
-              rules={[{ required: true, message: "Please select field type" }]}
+              rules={[{ required: true, message: "Please enter min length" }]}
             >
               <AntdNumberInput />
             </Form.Item>
           </AntdCol>
+
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
               name="maxLength"
               label="Max Length"
-              rules={[{ required: true, message: "Please select field type" }]}
+              rules={[{ required: true, message: "Please enter max length" }]}
             >
               <AntdNumberInput />
             </Form.Item>
           </AntdCol>
+
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
               name="placeHolder"
@@ -131,6 +158,7 @@ export default function FormBuilder() {
               <AntdInput placeholder="Placeholder" />
             </Form.Item>
           </AntdCol>
+
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
               name="Label"
@@ -146,11 +174,20 @@ export default function FormBuilder() {
         <AntdRow gutter={[16, 16]}>
           <AntdCol>
             <AntdButton type="primary" htmlType="submit">
-              Save Field
+              Add Field
             </AntdButton>
           </AntdCol>
         </AntdRow>
       </Form>
+
+      {/* Table to show added fields */}
+      <Table
+        columns={columns}
+        dataSource={formbuilder}
+        rowKey={(record, index) => index}
+        pagination={false}
+        style={{ marginTop: "20px" }}
+      />
     </AntdCard>
   );
 }
