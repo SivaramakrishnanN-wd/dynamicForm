@@ -10,11 +10,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formBuilder } from "../store/slice/formSlice";
 
-
 export default function FormBuilder() {
   const [form] = Form.useForm();
-  const dispatch = useDispatch()
-  const formbuilder = useSelector((state) => state.form)?.[0]?.formDetails
+  const dispatch = useDispatch();
+  const formbuilder = useSelector((state) => state.form);
   const [showDropdownOptions, setShowDropdownOptions] = useState(false);
   const fieldOptions = [
     { value: "text", label: "Text" },
@@ -33,8 +32,17 @@ export default function FormBuilder() {
   ];
 
   const onFinish = (values) => {
-    dispatch(formBuilder(values))
+    const existingField = formbuilder?.find(
+      (field) => field.fieldName === values.fieldName
+    );
+
+    if (existingField) {
+      dispatch(updateField(values));
+    } else {
+      dispatch(formBuilder(values));
+    }
   };
+
   const handleFieldTypeChange = (value) => {
     if (value === "dropdown") {
       setShowDropdownOptions(true);
@@ -43,13 +51,10 @@ export default function FormBuilder() {
       form.setFieldsValue({ dropdownOptions: [] });
     }
   };
+
   return (
     <AntdCard title="Form Builder">
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         {/* Form Name */}
         <AntdRow gutter={[16, 16]} align="middle">
           <AntdCol xs={24} sm={12} md={8}>
@@ -86,14 +91,15 @@ export default function FormBuilder() {
                 onChange={handleFieldTypeChange}
               />
             </Form.Item>
-
           </AntdCol>
           {showDropdownOptions && (
             <AntdCol xs={24} sm={12} md={8}>
               <Form.Item
                 name="dropdownOptions"
                 label="Dropdown Options"
-                rules={[{ required: true, message: "Please enter dropdown options" }]}
+                rules={[
+                  { required: true, message: "Please enter dropdown options" },
+                ]}
               >
                 <AntdDropdown
                   mode="tags"
@@ -102,7 +108,6 @@ export default function FormBuilder() {
                 />
               </Form.Item>
             </AntdCol>
-
           )}
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item

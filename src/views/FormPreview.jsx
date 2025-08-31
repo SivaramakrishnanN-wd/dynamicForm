@@ -1,8 +1,7 @@
 import React from "react";
-import AntdCard from "../components/AntdCard";
-import AntdRow from "../components/AntdRow";
-import AntdCol from "../components/AntdCol";
 import { Form } from "antd";
+import { useSelector } from "react-redux";
+
 import AntdButton from "../components/AntdButton";
 import AntdCheckbox from "../components/AntdCheckbox";
 import AntdDatePicker from "../components/AntdDatePicker";
@@ -17,23 +16,13 @@ import AntdSearchInput from "../components/AntdSearchInput";
 import AntdTextArea from "../components/AntdTextArea";
 import AntdToggle from "../components/AntdToggle";
 import AntdUpload from "../components/AntdUpload";
+import AntdRow from "../components/AntdRow";
+import AntdCol from "../components/AntdCol";
+import './FormPreview.css'
 
 const FormPreview = () => {
   const [form] = Form.useForm();
-
-  const data = [
-    { fieldName: "name", fieldType: "text", Label: "Name", placeHolder: "Enter Name" },
-    { fieldName: "email", fieldType: "email", Label: "Email", placeHolder: "Enter Email" },
-    { fieldName: "password", fieldType: "password", Label: "Password", placeHolder: "Enter Password" },
-    { fieldName: "mobile", fieldType: "mobile", Label: "Mobile", placeHolder: "Enter Mobile" },
-    { fieldName: "age", fieldType: "number", Label: "Age", placeHolder: "Enter Age" },
-    { fieldName: "gender", fieldType: "dropdown", Label: "Gender", placeHolder: "Select Gender", option: ["Male", "Female", "Other"] },
-    { fieldName: "dob", fieldType: "date", Label: "Date of Birth", placeHolder: "Select Date" },
-    { fieldName: "jobType", fieldType: "radio", Label: "Job Type", option: ["Full Time", "Part Time"] },
-    { fieldName: "resume", fieldType: "upload", Label: "Upload Resume" },
-    { fieldName: "newsletter", fieldType: "toggle", Label: "Subscribe to Newsletter" },
-    { fieldName: "bio", fieldType: "textarea", Label: "Bio", placeHolder: "Write about yourself" },
-  ];
+  const data = useSelector((state) => state.form);
 
   const renderField = (field) => {
     const commonProps = {
@@ -48,7 +37,13 @@ const FormPreview = () => {
       case "password": return <AntdPasswordInput {...commonProps} />;
       case "mobile": return <AntdMobileInput {...commonProps} />;
       case "number": return <AntdNumberInput {...commonProps} />;
-      case "dropdown": return <AntdDropdown {...commonProps} options={field.option?.map(opt => ({ label: opt, value: opt }))} />;
+      case "dropdown":
+        return (
+          <AntdDropdown
+            {...commonProps}
+            options={field.dropdownOptions?.map(opt => ({ label: opt, value: opt }))}
+          />
+        );
       case "checkbox": return <AntdCheckbox options={field.option || []} />;
       case "radio": return <AntdRadioGroup options={field.option || []} />;
       case "date": return <AntdDatePicker {...commonProps} />;
@@ -65,31 +60,33 @@ const FormPreview = () => {
   };
 
   return (
-    <AntdCard title={"Preview"}>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        <AntdRow gutter={[16, 16]} align="middle">
-          {data.map((field, index) => (
-            <AntdCol xs={24} sm={12} md={8} xl={6} key={index}>
-              <Form.Item
-                name={field.fieldName}
-                label={field.Label}
-                rules={[{ required: true, message: `Please enter ${field.Label}` }]}
-              >
-                {renderField(field)}
-              </Form.Item>
-            </AntdCol>
-          ))}
-        </AntdRow>
+    <div className="form-preview-wrapper">
+      <div className="form-a4-sheet">
+        <h2 className="form-title">{data?.[0]?.formName}</h2>
+        <Form form={form} layout="vertical" className="custom-form" onFinish={onFinish}>
+          <AntdRow gutter={[24, 24]}>
+            {data.map((field, index) => (
+              <AntdCol xs={24} sm={12} md={8} key={index}>
+                <Form.Item
+                  name={field.fieldName}
+                  label={field.Label}
+                  rules={[{ required: true, message: `Please enter ${field.Label}` }]}
+                  className="form-item"
+                >
+                  {renderField(field)}
+                </Form.Item>
+              </AntdCol>
+            ))}
+          </AntdRow>
 
-        <AntdRow gutter={[16, 16]}>
-          <AntdCol>
+          <div className="form-submit">
             <AntdButton type="primary" htmlType="submit">
-              Save Field
+              Submit
             </AntdButton>
-          </AntdCol>
-        </AntdRow>
-      </Form>
-    </AntdCard>
+          </div>
+        </Form>
+      </div>
+    </div>
   );
 };
 
