@@ -18,7 +18,7 @@ import AntdToggle from "../components/AntdToggle";
 import AntdUpload from "../components/AntdUpload";
 import AntdRow from "../components/AntdRow";
 import AntdCol from "../components/AntdCol";
-import './FormPreview.css'
+import "./FormPreview.css";
 
 const FormPreview = () => {
   const [form] = Form.useForm();
@@ -32,26 +32,42 @@ const FormPreview = () => {
     };
 
     switch (field.fieldType) {
-      case "text": return <AntdInput {...commonProps} />;
-      case "email": return <AntdEmailInput {...commonProps} />;
-      case "password": return <AntdPasswordInput {...commonProps} />;
-      case "mobile": return <AntdMobileInput {...commonProps} />;
-      case "number": return <AntdNumberInput {...commonProps} />;
+      case "text":
+        return <AntdInput {...commonProps} />;
+      case "email":
+        return <AntdEmailInput {...commonProps} />;
+      case "password":
+        return <AntdPasswordInput {...commonProps} />;
+      case "mobile":
+        return <AntdMobileInput {...commonProps} />;
+      case "number":
+        return <AntdNumberInput {...commonProps} />;
       case "dropdown":
         return (
           <AntdDropdown
             {...commonProps}
-            options={field.dropdownOptions?.map(opt => ({ label: opt, value: opt }))}
+            options={field.dropdownOptions?.map((opt) => ({
+              label: opt,
+              value: opt,
+            }))}
           />
         );
-      case "checkbox": return <AntdCheckbox options={field.option || []} />;
-      case "radio": return <AntdRadioGroup options={field.option || []} />;
-      case "date": return <AntdDatePicker {...commonProps} />;
-      case "upload": return <AntdUpload />;
-      case "toggle": return <AntdToggle />;
-      case "textarea": return <AntdTextArea {...commonProps} />;
-      case "search": return <AntdSearchInput {...commonProps} />;
-      default: return null;
+      case "checkbox":
+        return <AntdCheckbox options={field.option || []} />;
+      case "radio":
+        return <AntdRadioGroup options={field.option || []} />;
+      case "date":
+        return <AntdDatePicker {...commonProps} />;
+      case "upload":
+        return <AntdUpload />;
+      case "toggle":
+        return <AntdToggle />;
+      case "textarea":
+        return <AntdTextArea {...commonProps} />;
+      case "search":
+        return <AntdSearchInput {...commonProps} />;
+      default:
+        return null;
     }
   };
 
@@ -63,14 +79,21 @@ const FormPreview = () => {
     <div className="form-preview-wrapper">
       <div className="form-a4-sheet">
         <h2 className="form-title">{data?.[0]?.formName}</h2>
-        <Form form={form} layout="vertical" className="custom-form" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          className="custom-form"
+          onFinish={onFinish}
+        >
           <AntdRow gutter={[24, 24]}>
             {data.map((field, index) => (
               <AntdCol xs={24} sm={12} md={8} key={index}>
                 <Form.Item
                   name={field.fieldName}
                   label={field.Label}
-                  rules={[{ required: true, message: `Please enter ${field.Label}` }]}
+                  rules={[
+                    { required: true, message: `Please enter ${field.Label}` },
+                  ]}
                   className="form-item"
                 >
                   {renderField(field)}
@@ -79,11 +102,13 @@ const FormPreview = () => {
             ))}
           </AntdRow>
 
-          <div className="form-submit">
-            <AntdButton type="primary" htmlType="submit">
-              Submit
-            </AntdButton>
-          </div>
+          {data?.length > 0 && (
+            <div className="form-submit">
+              <AntdButton type="primary" htmlType="submit">
+                Submit
+              </AntdButton>
+            </div>
+          )}
         </Form>
       </div>
     </div>
