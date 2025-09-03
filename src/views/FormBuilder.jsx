@@ -13,9 +13,15 @@ import { formBuilder } from "../store/slice/formSlice";
 export default function FormBuilder() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const formbuilder = useSelector((state) => state.form) || []; // redux array
-  const [showDropdownOptions, setShowDropdownOptions] = useState(false);
-  console.log("formbuilder", formbuilder)
+  const formbuilderRes = useSelector((state) => state.form) || []; // redux array
+  const [disabled, setDisabled] = useState({
+    dropdown: false,
+    minLength: false,
+    maxLength: false
+  })
+
+  const [formName, setFormName] = useState("");
+
   const fieldOptions = [
     { value: "text", label: "Text" },
     { value: "number", label: "Number" },
@@ -35,18 +41,7 @@ export default function FormBuilder() {
   const onFinish = (values) => {
     dispatch(formBuilder(values));
     form.resetFields();
-    setShowDropdownOptions(false);
   };
-
-  const handleFieldTypeChange = (value) => {
-    if (["dropdown", "radio", "checkbox"].includes(value)) {
-      setShowDropdownOptions(true);
-    } else {
-      setShowDropdownOptions(false);
-      form.setFieldsValue({ dropdownOptions: [] });
-    }
-  };
-
 
   // table column setup
   const columns = [
@@ -58,30 +53,54 @@ export default function FormBuilder() {
     { title: "Max Length", dataIndex: "maxLength", key: "maxLength" },
     {
       title: "Options",
-      dataIndex: "dropdownOptions",
-      key: "dropdownOptions",
+      dataIndex: "options",
+      key: "options",
       render: (options) => (options ? options.join(", ") : "-"),
     },
   ];
 
-
+  const handleFieldTypeChange = (value) => {
+    if (["text", "textarea", "password"].includes(value)) {
+      setDisabled({
+        minLength: false,
+        maxLength: false,
+      });
+    } else if (["dropdown", "radio", "checkbox"].includes(value)) {
+      setDisabled({
+        minLength: true,
+        maxLength: true,
+      });
+    } else {
+      setDisabled({
+        dropdown: true,
+        minLength: true,
+        maxLength: true,
+      });
+    }
+  };
   return (
     <AntdCard title="Form Builder">
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        {/* Form Name */}
-        <AntdRow gutter={[16, 16]} align="middle">
-          <AntdCol xs={24} sm={12} md={8}>
-            <Form.Item
-              name="formName"
-              label="Form Name"
-              rules={[{ required: true, message: "Please enter form name" }]}
-            >
-              <AntdInput placeholder="Enter Form Name" />
-            </Form.Item>
-          </AntdCol>
-        </AntdRow>
+      {/* Form Name Row */}
+      <AntdRow gutter={[16, 16]}>
+        <AntdCol xs={24} sm={12} md={8}>
+          <Form.Item
+            label="Form Name"
+            required
+            tooltip="Enter a unique form name"
+          >
+            <AntdInput
+              placeholder="Enter Form Name"
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+              disabled={Object.keys(formbuilderRes).length > 0}
+            />
+          </Form.Item>
+        </AntdCol>
 
-        {/* Field Name + Type */}
+      </AntdRow>
+
+      {/* Fields Form */}
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <AntdRow gutter={[16, 16]} align="middle">
           <AntdCol xs={24} sm={12} md={8}>
             <Form.Item
@@ -107,45 +126,42 @@ export default function FormBuilder() {
             </Form.Item>
           </AntdCol>
 
-          {showDropdownOptions && (
-            <AntdCol xs={24} sm={12} md={8}>
-              <Form.Item
-                name="dropdownOptions"
-                label={
-                  form.getFieldValue("fieldType") === "radio"
-                    ? "Radio Options"
-                    : form.getFieldValue("fieldType") === "checkbox"
-                      ? "Checkbox Options"
-                      : "Dropdown Options"
-                }
-                rules={[{ required: true, message: "Please enter options" }]}
-              >
-                <AntdDropdown
-                  mode="tags"
-                  style={{ width: "100%" }}
-                  placeholder="Type and press Enter to add options"
-                />
-              </Form.Item>
-            </AntdCol>
-          )}
 
           <AntdCol xs={24} sm={12} md={8}>
+            <Form.Item
+              name="dropdownOptions"
+              label={"Dropdown Options"
+              }
+              rules={[{ required: !disabled?.text, message: "Please enter options" }]}
+            >
+              <AntdDropdown
+                mode="tags"
+                style={{ width: "100%" }}
+                placeholder="Type and press Enter to add options"
+                disabled={disabled?.dropdown}
+              />
+            </Form.Item>
+          </AntdCol>
+
+
+          <AntdCol xs={24} sm={12} md={4}>
             <Form.Item
               name="minLength"
               label="Min Length"
               rules={[{ required: true, message: "Please enter min length" }]}
             >
-              <AntdNumberInput />
+              <AntdNumberInput disabled={disabled?.minLength} />
             </Form.Item>
           </AntdCol>
 
-          <AntdCol xs={24} sm={12} md={8}>
+          <AntdCol xs={24} sm={12} md={4}>
             <Form.Item
               name="maxLength"
               label="Max Length"
               rules={[{ required: true, message: "Please enter max length" }]}
             >
-              <AntdNumberInput />
+              <AntdNumberInput disabled={disabled?.maxLength} />
+
             </Form.Item>
           </AntdCol>
 
@@ -170,7 +186,6 @@ export default function FormBuilder() {
           </AntdCol>
         </AntdRow>
 
-        {/* Submit Button */}
         <AntdRow gutter={[16, 16]}>
           <AntdCol>
             <AntdButton type="primary" htmlType="submit">
@@ -180,10 +195,9 @@ export default function FormBuilder() {
         </AntdRow>
       </Form>
 
-      {/* Table to show added fields */}
       <Table
         columns={columns}
-        dataSource={formbuilder}
+        dataSource={formbuilderRes}
         rowKey={(record, index) => index}
         pagination={false}
         style={{ marginTop: "20px" }}

@@ -41,10 +41,10 @@ const FormPreview = () => {
         return (
           <AntdDropdown
             {...commonProps}
-            options={field.dropdownOptions?.map(opt => ({ label: opt, value: opt }))}
+            options={field.options?.map(opt => ({ label: opt, value: opt }))}
           />
         );
-      case "checkbox": return <AntdCheckbox options={field.option || []} />;
+      case "checkbox": return <AntdCheckbox options={field.options || []} />;
       case "radio": return <AntdRadioGroup options={field.option || []} />;
       case "date": return <AntdDatePicker {...commonProps} />;
       case "upload": return <AntdUpload />;
