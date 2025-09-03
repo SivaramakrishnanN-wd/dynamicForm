@@ -1,0 +1,84 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.menuIcon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 16px;
+  background-color: #364d79;
+  color: #fff;
+  border-bottom: 6px solid #ffc107;
+}
+
+.menuIcon span {
+  width: 40px;
+  margin: 0px 5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.menuIcon h2 {
+  color: #fff;
+  margin: 0;
+}
+
+.ant-menu-dark {
+  background-color: #001529 !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #1890ff !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.ant-menu-inline-collapsed {
+  width: 70px;
+}
+
+.ant-menu-dark {
+  background-color: #364d79 !important;
+}
+
+.ant-menu {
+  height: calc(100vh - 65px) !important;
+}
+
+.ant-menu-dark .ant-menu-item .anticon {
+  color: #fff !important;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.ant-menu-dark .ant-menu-item-selected .anticon,
+.ant-menu-dark .ant-menu-item:hover .anticon {
+  color: #fff !important;
+}
+
+.ant-menu-inline-collapsed .ant-menu-item .anticon {
+  font-size: 20px;
+}
+
+.mainContent {
+  display: flex;
+}
+
+.menu-container.collapsed {
+  width: 80px;
+  transition: width 0.3s ease;
+}
+
+.menu-container.expanded {
+  width: 256px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .menu-container {
+    width: 100% !important;
+  }
+}
