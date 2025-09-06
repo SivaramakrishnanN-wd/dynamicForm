@@ -27,7 +27,7 @@
         {
             "key": 1757135175188,
             "fieldName": "Mobile Number",
-            "fieldType": "Mobile Numb",
+            "fieldType": "mobile",
             "placeHolder": "Mobile Number",
             "Label": "Mobile"
         },

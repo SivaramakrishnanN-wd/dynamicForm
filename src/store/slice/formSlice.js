@@ -44,5 +44,6 @@ export const {
   editBuilder,
   deleteBuilder,
   resetForm,
+  reorderBuilder,
 } = formSlice.actions;
 export default formSlice.reducer;
