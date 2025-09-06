@@ -46,11 +46,11 @@ const FormPreview = () => {
         return (
           <AntdDropdown
             {...commonProps}
-            options={field.options?.map(opt => ({ label: opt, value: opt }))}
+            options={field.dropdownOptions?.map(opt => ({ label: opt, value: opt }))}
           />
         );
-      case "checkbox": return <AntdCheckbox options={field.options || []} />;
-      case "radio": return <AntdRadioGroup options={field.option || []} />;
+      case "checkbox": return <AntdCheckbox options={field.dropdownOptions || []} />;
+      case "radio": return <AntdRadioGroup options={field.dropdownOptions || []} />;
       case "date": return <AntdDatePicker {...commonProps} />;
       case "upload": return <AntdUpload />;
       case "toggle": return <AntdToggle />;
@@ -61,7 +61,7 @@ const FormPreview = () => {
   };
 
   const onFinish = (values) => {
-    console.log("values", values);
+    alert("Form Save Succesfully")
   };
 
   return (

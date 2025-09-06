@@ -7,27 +7,24 @@ import AntdInput from "../components/AntdInput";
 import AntdRow from "../components/AntdRow";
 import AntdButton from "../components/AntdButton";
 import AntdNumberInput from "../components/AntdNumberInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFormName, formBuilder, editBuilder, deleteBuilder, resetForm } from "../store/slice/formSlice";
+import { setFormName, formBuilder, editBuilder, deleteBuilder, resetForm, reorderBuilder } from "../store/slice/formSlice";
 import { useNavigate } from "react-router-dom";
+import AntdTable from "../components/AntdTable";
 
 export default function FormBuilder() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formbuilderRes = useSelector((state) => state.form) || []; // redux array
+  const formbuilderRes = useSelector((state) => state.form) || [];
   const [modelOpen, setModelOpen] = useState(false)
   const [disabled, setDisabled] = useState({
     dropdown: false,
     minLength: false,
     maxLength: false
   })
-
-  console.log("formbuilderRes", formbuilderRes)
-
-
   const fieldOptions = [
     { value: "text", label: "Text" },
     { value: "number", label: "Number" },
@@ -109,17 +106,22 @@ export default function FormBuilder() {
   const handleDelete = (record) => {
     dispatch(deleteBuilder(record.key))
   }
+  const handleBack = () =>{
+    navigate("/Home")
+  }
+
 
   const handleFormName = (value) => {
     dispatch(setFormName(value))
   }
-  // table column setup
   const columns = [
     { title: "Field Name", dataIndex: "fieldName", key: "fieldName" },
-    { title: "Field Type", dataIndex: "fieldType", key: "fieldType" , render: (value) => {
-    const option = fieldOptions.find((opt) => opt.value === value);
-    return option ? option.label : value;
-  }, },
+    {
+      title: "Field Type", dataIndex: "fieldType", key: "fieldType", render: (value) => {
+        const option = fieldOptions.find((opt) => opt.value === value);
+        return option ? option.label : value;
+      },
+    },
     { title: "Label", dataIndex: "Label", key: "Label" },
     { title: "Placeholder", dataIndex: "placeHolder", key: "placeHolder" },
     { title: "Min Length", dataIndex: "minLength", key: "minLength", render: (text) => (text ? text : "-"), },
@@ -293,18 +295,19 @@ export default function FormBuilder() {
               </AntdRow>
             </Form>
           </Modal>
-
-          <Table
+          <AntdTable
             columns={columns}
             dataSource={formbuilderRes?.fields}
-            rowKey={(record, index) => index}
-            pagination={false}
-            style={{ marginTop: "20px" }}
+            setDataSource={(newData) => dispatch(reorderBuilder(newData))} // 🔑 local state now
+            scroll={{ x: 1000 }}
+            enableDrag={true}
           />
-
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "3%" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "3%", gap: "2%" }}>
+            <AntdButton type="" onClick={handleBack}>
+              Cancel
+            </AntdButton>
             <AntdButton type="primary" onClick={handleCreateForm}>
-              Create Form
+              Save & Preview Form
             </AntdButton>
           </div>
         </AntdCard>
