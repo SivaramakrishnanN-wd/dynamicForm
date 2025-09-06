@@ -32,6 +32,9 @@ const formSlice = createSlice({
       formName: "",
       fields: [],
     }),
+    reorderBuilder: (state, action) => {
+      state.fields = action.payload; // new reordered fields array
+    },
   },
 });
 
