@@ -67,7 +67,7 @@ const FormPreview = () => {
   return (
     <div className="form-preview-wrapper">
       <div className="form-a4-sheet">
-        <h2 className="form-title">{data?.[0]?.formName}</h2>
+        <h2 className="form-title">{data?.formName}</h2>
         <Form
           form={form}
           layout="vertical"
@@ -75,7 +75,7 @@ const FormPreview = () => {
           onFinish={onFinish}
         >
           <AntdRow gutter={[24, 24]}>
-            {data.map((field, index) => (
+            {data?.fields?.map((field, index) => (
               <AntdCol xs={24} sm={12} md={8} key={index}>
                 <Form.Item
                   name={field.fieldName}
@@ -91,7 +91,7 @@ const FormPreview = () => {
             ))}
           </AntdRow>
 
-          {data?.length > 0 && (
+          {data?.fields?.length > 0 && (
             <div className="form-submit">
               <AntdButton type="primary" htmlType="submit">
                 Submit

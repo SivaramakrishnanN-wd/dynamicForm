@@ -65,6 +65,7 @@
 
 .mainContent {
   display: flex;
+  width: 100%;
 }
 
 .menu-container.collapsed {
