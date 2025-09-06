@@ -1,0 +1,56 @@
+{
+    "formName": "test",
+    "fields": [
+        {
+            "key": 1757134896590,
+            "fieldName": "Name",
+            "fieldType": "text",
+            "minLength": 33333,
+            "maxLength": 33,
+            "placeHolder": "Enter Name",
+            "Label": "Name"
+        },
+        {
+            "key": 1757135001170,
+            "fieldName": "Name11",
+            "fieldType": "email",
+            "placeHolder": "Enter email",
+            "Label": "email"
+        },
+        {
+            "key": 1757135131457,
+            "fieldName": "age",
+            "fieldType": "number",
+            "placeHolder": "Enter age",
+            "Label": "age"
+        },
+        {
+            "key": 1757135175188,
+            "fieldName": "Mobile Number",
+            "fieldType": "Mobile Numb",
+            "placeHolder": "Mobile Number",
+            "Label": "Mobile"
+        },
+        {
+            "key": 1757135203089,
+            "fieldName": "Address",
+            "fieldType": "textarea",
+            "minLength": 100,
+            "maxLength": 10000,
+            "placeHolder": "Address",
+            "Label": "Address"
+        },
+        {
+            "key": 1757135255344,
+            "fieldName": "Gender",
+            "fieldType": "radio",
+            "dropdownOptions": [
+                "Male",
+                "Female",
+                "Others"
+            ],
+            "placeHolder": "Gender",
+            "Label": "Gender"
+        }
+    ]
+}

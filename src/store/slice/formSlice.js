@@ -4,14 +4,18 @@ const formSlice = createSlice({
   name: "formBuilder",
   initialState: {
     formName: "",
-    fields: []
+    fields: [],
   },
   reducers: {
     setFormName: (state, action) => {
       state.formName = action.payload;
     },
     formBuilder: (state, action) => {
-      state.fields.push(action.payload);
+      if (Array.isArray(action.payload)) {
+        state.fields = [...action.payload]; // Reset fields when array is provided
+      } else {
+        state.fields.push(action.payload); // Add single field
+      }
     },
     editBuilder: (state, action) => {
       const { key, ...updatedData } = action.payload;
@@ -26,11 +30,16 @@ const formSlice = createSlice({
     },
     resetForm: () => ({
       formName: "",
-      fields: []
-    })
-  }
+      fields: [],
+    }),
+  },
 });
 
-export const { setFormName, formBuilder, editBuilder, deleteBuilder, resetForm } =
-  formSlice.actions;
+export const {
+  setFormName,
+  formBuilder,
+  editBuilder,
+  deleteBuilder,
+  resetForm,
+} = formSlice.actions;
 export default formSlice.reducer;

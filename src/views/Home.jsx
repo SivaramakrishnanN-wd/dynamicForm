@@ -4,9 +4,12 @@ import {
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  EyeOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, Table } from "antd";
 import { useState } from "react";
+
 import { useNavigate, Outlet } from "react-router-dom";
 
 const Home = () => {
@@ -18,12 +21,7 @@ const Home = () => {
   };
 
   const items = [
-    {
-      key: "1",
-      icon: <HomeOutlined />,
-      label: "Home",
-      link: "/",
-    },
+    { key: "1", icon: <HomeOutlined />, label: "Home", link: "/home" },
     {
       key: "2",
       icon: <DiffOutlined />,
@@ -46,6 +44,8 @@ const Home = () => {
     }
   };
 
+
+
   return (
     <>
       <div className="menuIcon">
@@ -56,20 +56,21 @@ const Home = () => {
       </div>
       <div style={{ display: "flex" }}>
         {/* Sidebar */}
+        <div
+          className={`menu-container ${collapsed ? "collapsed" : "expanded"}`}
+        >
+          <Menu
+            mode="inline"
+            theme="dark"
+            inlineCollapsed={collapsed}
+            items={items}
+            onClick={handleMenuClick}
+          />
+        </div>
 
-        {/* Main content area */}
         <div className="mainContent">
-          <div
-            className={`menu-container ${collapsed ? "collapsed" : "expanded"}`}
-          >
-            <Menu
-              mode="inline"
-              theme="dark"
-              inlineCollapsed={collapsed}
-              items={items}
-              onClick={handleMenuClick}
-            />
-          </div>
+
+
           <Outlet />
         </div>
       </div>
