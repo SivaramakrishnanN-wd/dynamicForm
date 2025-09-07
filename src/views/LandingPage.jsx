@@ -2,18 +2,21 @@ import { EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { useDispatch } from "react-redux";
 import { formBuilder, setFormName } from "../store/slice/formSlice";
-import Data from './data.json'
+import Data from "./data.json";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
-
-  const handleEdit = (item) => {
-    dispatch(setFormName(Data.formName))
+  const handleEditView = (item, from) => {
+    dispatch(setFormName(Data.formName));
     dispatch(formBuilder(Data.fields));
-    navigate('/builder')
+    if (from === "edit") {
+      navigate("/builder");
+    } else if(from === "view") {
+      navigate("/preview");
+    }
   };
 
   const columns = [
@@ -27,7 +30,7 @@ const LandingPage = () => {
       render: (_, record) => (
         <EditOutlined
           style={{ color: "#364d79", cursor: "pointer" }}
-          onClick={() => handleEdit(record)}
+          onClick={() => handleEditView(record, "edit")}
         />
       ),
     },
@@ -38,7 +41,7 @@ const LandingPage = () => {
       render: (_, record) => (
         <EyeOutlined
           style={{ color: "#364d79", cursor: "pointer" }}
-          onClick={() => handlePreview(record)}
+          onClick={() => handleEditView(record, "view")}
         />
       ),
     },
