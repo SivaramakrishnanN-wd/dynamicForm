@@ -1,36 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Typography } from "antd";
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
 import AntdCard from "../components/AntdCard";
 import AntdEmailInput from "../components/AntdEmailInput";
 import AntdPasswordInput from "../components/AntdPasswordInput";
 import AntdButton from "../components/AntdButton";
+import axios from "axios";
 
 const { Title } = Typography;
 
 const Login = () => {
-  const onFinish = async (values) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+  const navigate = useNavigate();
 
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Success:", data);
-        alert("Login Successful!");
-      } else {
-        console.error("Error:", data.message);
-        alert(`Login failed: ${data.message}`);
-      }
-    } catch (error) {
-      console.error("Server Error:", error);
-      alert("Server error. Please try again later.");
+  useEffect(() => {
+    if (sessionStorage.getItem("authToken")) {
+      navigate("/home", { replace: true });
     }
+  }, []);
+
+  const onFinish = (values) => {
+    const { email, password } = values;
+    axios
+      .post("http://localhost:5000/login", { email, password })
+      .then((result) => {
+        if (result.data.message === "Success") {
+          const token = result.data.token;
+          sessionStorage.setItem("authToken", token);
+          navigate("/home");
+        } else {
+          console.error(result.data.message);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -54,7 +56,10 @@ const Login = () => {
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
-            <AntdEmailInput prefix={<MailOutlined />} placeholder="Enter your email" />
+            <AntdEmailInput
+              prefix={<MailOutlined />}
+              placeholder="Enter your email"
+            />
           </Form.Item>
 
           <Form.Item
@@ -62,7 +67,10 @@ const Login = () => {
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <AntdPasswordInput prefix={<LockOutlined />} placeholder="Enter your password" />
+            <AntdPasswordInput
+              prefix={<LockOutlined />}
+              placeholder="Enter your password"
+            />
           </Form.Item>
 
           <Form.Item>

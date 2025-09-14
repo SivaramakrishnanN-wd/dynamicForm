@@ -65,6 +65,8 @@
 
 .mainContent {
   width: 100%;
+  height: calc(100vh - 65px);
+  overflow-y: auto;
 }
 
 .menu-container.collapsed {

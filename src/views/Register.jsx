@@ -1,19 +1,28 @@
 import React from "react";
 import { Form, Typography } from "antd";
-import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import AntdButton from '../components/AntdButton';
-import AntdCard from '../components/AntdCard';
-import AntdEmailInput from '../components/AntdEmailInput';
-import AntdInput from '../components/AntdInput';
-import AntdPasswordInput from '../components/AntdPasswordInput';
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import AntdButton from "../components/AntdButton";
+import AntdCard from "../components/AntdCard";
+import AntdEmailInput from "../components/AntdEmailInput";
+import AntdInput from "../components/AntdInput";
+import AntdPasswordInput from "../components/AntdPasswordInput";
+import axios from "axios";
 
 const { Title } = Typography;
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-    alert('Registration Successful! Check the console for details.');
+    const { name, email, password } = values;
+    axios
+      .post("http://localhost:5000/register", { name, email, password })
+      .then((result) => {
+        console.log(result);
+        navigate("/login");
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -30,38 +39,33 @@ const Register = () => {
           layout="vertical"
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[
-              { required: true, message: 'Please input your Username!' },
-            ]}
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please input your Name!" }]}
           >
-            <AntdInput
-              prefix={<UserOutlined />}
-              placeholder="Username"
-            />
+            <AntdInput prefix={<UserOutlined />} placeholder="Name" />
           </Form.Item>
 
           <Form.Item
             label="Email Address"
             name="email"
             rules={[
-              { type: 'email', message: 'The input is not a valid email!' },
-              { required: true, message: 'Please input your Email!' },
+              { type: "email", message: "The input is not a valid email!" },
+              { required: true, message: "Please input your Email!" },
             ]}
           >
-            <AntdEmailInput
-              prefix={<MailOutlined />}
-              placeholder="Email"
-            />
+            <AntdEmailInput prefix={<MailOutlined />} placeholder="Email" />
           </Form.Item>
 
           <Form.Item
             label="Password"
             name="password"
             rules={[
-              { required: true, message: 'Please input your Password!' },
-              { min: 6, message: 'Password must be at least 6 characters long!' },
+              { required: true, message: "Please input your Password!" },
+              {
+                min: 6,
+                message: "Password must be at least 6 characters long!",
+              },
             ]}
             hasFeedback
           >
