@@ -9,7 +9,6 @@ const AntdEmailInput = ({
   allowClear,
   disabled,
   size,
-  bordered,
   style,
   className,
   ...rest
@@ -23,7 +22,6 @@ const AntdEmailInput = ({
       allowClear={allowClear}
       disabled={disabled}
       size={size}
-      bordered={bordered}
       style={style}
       className={className}
       {...rest}

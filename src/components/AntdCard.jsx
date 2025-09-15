@@ -6,7 +6,6 @@ const AntdCard = ({
   title,
   extra,
   children,
-  bordered = true,
   hoverable = false,
   loading = false,
   style,
@@ -19,7 +18,6 @@ const AntdCard = ({
     <Card
       title={title}
       extra={extra}
-      bordered={bordered}
       hoverable={hoverable}
       loading={loading}
       style={style}

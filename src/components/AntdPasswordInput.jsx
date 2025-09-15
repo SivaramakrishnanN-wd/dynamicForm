@@ -9,7 +9,6 @@ const AntdPasswordInput = ({
   allowClear,
   disabled,
   size,
-  bordered,
   visibilityToggle = true,
   style,
   className,
@@ -23,7 +22,6 @@ const AntdPasswordInput = ({
       allowClear={allowClear}
       disabled={disabled}
       size={size}
-      bordered={bordered}
       visibilityToggle={visibilityToggle}
       style={style}
       className={className}

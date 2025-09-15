@@ -1,22 +1,35 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Suspense } from "react";
 import "./App.css";
-import FormBuilder from "./views/FormBuilder";
-import FormPreview from "./views/FormPreview";
-import Home from "./views/Home";
-import LandingPage from "./views/LandingPage";
+import { AppRoutes } from "./routes/AppRoutes";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Login from "./views/Login";
 
 function App() {
+  
   return (
     <Router>
-      <div className="p-4">
-        <Routes>
-          <Route path="*" element={<Home />}>
-            <Route path="home" element={<LandingPage />} />
-            <Route path="builder" element={<FormBuilder />} />
-            <Route path="preview" element={<FormPreview />} />
-          </Route>
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+
+        <Route element={<ProtectedRoute />}>
+          {AppRoutes.filter((i) => i.loadable).map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <route.component />
+                </Suspense>
+              }
+            />
+          ))}
+
+          <Route index element={<Navigate to="/home" replace />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
     </Router>
   );
 }
