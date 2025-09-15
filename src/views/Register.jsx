@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Typography } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,12 @@ const { Title } = Typography;
 
 const Register = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("authToken")) {
+      navigate("/home", { replace: true });
+    }
+  }, []);
 
   const onFinish = (values) => {
     const { name, email, password } = values;

@@ -4,6 +4,7 @@ import "./App.css";
 import { AppRoutes } from "./routes/AppRoutes";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./views/Login";
+import Register from "./views/Register";
 
 function App() {
   
@@ -11,6 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route element={<ProtectedRoute />}>
           {AppRoutes.filter((i) => i.loadable).map((route, index) => (
