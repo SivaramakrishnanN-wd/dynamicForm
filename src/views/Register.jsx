@@ -23,7 +23,7 @@ const Register = () => {
   const onFinish = (values) => {
     const { name, email, password } = values;
     axios
-      .post("http://localhost:5000/register", { name, email, password })
+      .post("https://server-wmax.onrender.com/register", { name, email, password })
       .then((result) => {
         console.log(result);
         navigate("/login");
