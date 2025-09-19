@@ -27,7 +27,6 @@ function App() {
             />
           ))}
 
-          <Route index element={<Navigate to="/home" replace />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />
