@@ -24,7 +24,7 @@ const Login = () => {
   const onFinish = (values) => {
     const { email, password } = values;
     axios
-      .post("http://localhost:5000/login", { email, password })
+      .post("https://server-wmax.onrender.com/login", { email, password })
       .then((result) => {
         if (result.data.message === "Success") {
           const token = result.data.token;
