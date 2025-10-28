@@ -4,24 +4,27 @@ import { useDispatch } from "react-redux";
 import { formBuilder, setFormName } from "../store/slice/formSlice";
 import Data from "./data.json";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [data, setData] = useState([])
 
   const handleEditView = (item, from) => {
     dispatch(setFormName(Data.formName));
     dispatch(formBuilder(Data.fields));
     if (from === "edit") {
       navigate("/builder");
-    } else if(from === "view") {
+    } else if (from === "view") {
       navigate("/preview");
     }
   };
 
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Created Date", dataIndex: "date", key: "date" },
+    { title: "Created Date", dataIndex: "createdAt", key: "date" },
     { title: "Created By", dataIndex: "createdBy", key: "createdBy" },
     {
       title: "Edit",
@@ -47,7 +50,7 @@ const Home = () => {
     },
   ];
 
-  const data = [
+  const dataSource = [
     {
       key: "test1",
       name: "Application Form",
@@ -61,6 +64,15 @@ const Home = () => {
       createdBy: "Siva",
     },
   ];
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/forms")
+      .then((result) => {
+        setData(result.data)
+      })
+      .catch((error) => console.error(error));
+  }, [])
 
   return (
     <div className="tableContainer" style={{ padding: "20px" }}>

@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFormName, formBuilder, editBuilder, deleteBuilder, resetForm, reorderBuilder } from "../store/slice/formSlice";
 import { useNavigate } from "react-router-dom";
 import AntdTable from "../components/AntdTable";
+import axios from "axios";
 
 export default function FormBuilder() {
   const [form] = Form.useForm();
@@ -82,9 +83,16 @@ export default function FormBuilder() {
   const handleAdd = () => {
     setModelOpen(true)
   }
-  const handleCreateForm = () => {
-    navigate("/preview")
-  }
+const handleCreateForm = () => {
+  axios
+    .post("http://localhost:5000/saveForm", {
+      data: formbuilderRes?.fields
+    })
+    .then((result) => {
+      console.log("✅ Saved:", result.data);
+    })
+    .catch((error) => console.error("❌ Error:", error));
+};
   const handleEdit = (record) => {
     // open modal
     setModelOpen(true);
@@ -106,7 +114,7 @@ export default function FormBuilder() {
   const handleDelete = (record) => {
     dispatch(deleteBuilder(record.key))
   }
-  const handleBack = () =>{
+  const handleBack = () => {
     navigate("/Home")
   }
 
